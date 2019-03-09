@@ -42,7 +42,7 @@
   function getQueryStr(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
     var r = window.location.search.substr(1).match(reg);
-    if (r != null && r != "")
+    if (r != null && r[2] != "")
       return unescape(r[2]);
     return null;
   }
