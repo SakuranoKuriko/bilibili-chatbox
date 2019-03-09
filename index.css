@@ -113,6 +113,7 @@ body #bc-main #menu .menu-wrap {
 body #bc-main #menu .menu-wrap #about {
   position: absolute;
   left: 24px;
+  bottom: 14px;
 }
 body #bc-main #menu .menu-wrap > div {
   margin-bottom: 3px;
