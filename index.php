@@ -326,7 +326,7 @@
     },
     dmtype: { //弹幕类型
       normal: 0, //非抽奖弹幕
-      flowergirl: 2 //花之少女
+      lottery: 2 //花之少女
     },
     fleettype: { //舰队身份类型
       normal: 0, //非舰长
@@ -409,7 +409,7 @@
             if (p.cmd!=this.cmd.dm)
               return;
             var dm = this.unpackdm(p.info);
-            if (bcv.conf.block.lottery && dm.comment.type != this.dmtype.normal)
+            if (bcv.conf.block.lottery && dm.comment.type == this.dmtype.lottery)
               return; //屏蔽抽奖弹幕
             if (bcv.conf.block.noregular && dm.user.type & this.usertype.regular==0)
               return; //屏蔽非正式会员
@@ -634,7 +634,7 @@ WISH_BOTTLE	许愿瓶？
 			0,
 			"b095da00",
 			0,
-			0, //0=非抽奖弹幕，2=花之少女
+			0, //0=普通弹幕，2=抽奖弹幕
 			0 //2=提督?
 		],
 		"哼~╭(╯^╰)╮就我最粗", //弹幕内容
