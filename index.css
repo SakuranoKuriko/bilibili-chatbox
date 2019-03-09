@@ -108,6 +108,11 @@ body #bc-main #menu .menu-wrap {
   text-align: center;
   background: rgba(150,150,150,0.9);
   border-radius: 20px;
+  position: relative;
+}
+body #bc-main #menu .menu-wrap #about {
+  position: absolute;
+  left: 24px;
 }
 body #bc-main #menu .menu-wrap > div {
   margin-bottom: 3px;
