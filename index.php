@@ -449,7 +449,7 @@
         spannercolor: "#4444ff",
         displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
         displaymax: parseInt(getQueryStr("l")) || defconf.displaymax,
-        colormode: parseInt(getQueryStr("c")) || defconf.colormode,
+        colormode: getQueryStr("c")!==null?parseInt(getQueryStr("c")):defconf.colormode,
         block: {
           lottery: getQuerybool("nl")!==null?getQuerybool("nl"):defconf.block.lottery, //屏蔽抽奖弹幕
           noregular: getQuerybool("nr")!==null?getQuerybool("nr"):defconf.block.noregular, //屏蔽非正式会员
@@ -542,17 +542,17 @@
         if (this.conf.colormode != defconf.colormode)
           newurl += "&c="+this.conf.colormode;
         if (this.conf.block.lottery != defconf.block.lottery)
-          newurl += "&nl="+this.conf.block.lottery?1:0;
+          newurl += "&nl="+(this.conf.block.lottery?1:0);
         if (this.conf.block.noregular != defconf.block.noregular)
-          newurl += "&nr="+this.conf.block.noregular?1:0;
+          newurl += "&nr="+(this.conf.block.noregular?1:0);
         if (this.conf.block.level != defconf.block.level)
           newurl += "&lv="+this.conf.block.level;
         if (this.conf.showstatus != defconf.showstatus)
-          newurl += "&st="+this.conf.showstatus?1:0;
+          newurl += "&st="+(this.conf.showstatus?1:0);
         if (this.conf.showspanner != defconf.showspanner)
-          newurl += "&sp="+this.conf.showspanner?1:0;
+          newurl += "&sp="+(this.conf.showspanner?1:0);
         if (this.conf.autoreconn != defconf.autoreconn)
-          newurl += "&re="+this.conf.autoreconn?1:0;
+          newurl += "&re="+(this.conf.autoreconn?1:0);
         location.href = newurl;
       },
       switchcolormode: function(){
