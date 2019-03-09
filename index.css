@@ -1,0 +1,128 @@
+.hide {
+  visibility: hidden;
+}
+.show {
+  visibility: visible;
+}
+input,
+button {
+  outline: none;
+  border: none;
+  transition: all 0.1s;
+  -webkit-transition: all 0.1s;
+}
+input:hover,
+button:hover,
+input:focus,
+button:focus {
+  background: #dff;
+}
+input:active,
+button:active {
+  background: #bff;
+}
+body {
+  background-color: rgba(0,0,0,0);
+  margin: 0 auto;
+  overflow: hidden;
+}
+body #bc-main .bc-wrap {
+  display: -webkit-flex;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+body #bc-main .bc-wrap .bcs {
+  display: -webkit-flex;
+  display: flex;
+  flex: auto;
+  margin: 10px;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  font-size: 24px;
+}
+body #bc-main .bc-wrap .bcs .bc {
+  flex: none;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+body #bc-main #menu {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: -100vh;
+  left: 0;
+  opacity: 0;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+body #bc-main #menu.show {
+  opacity: 1;
+  transform: translateY(100vh);
+  -webkit-transform: translateY(100vh);
+}
+body #bc-main #menu > div {
+  position: absolute;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+body #bc-main #menu .menu-mask {
+  width: 104%;
+  height: 104%;
+  left: -2%;
+  top: -2%;
+  background: #000;
+  opacity: 0.2;
+  z-index: 9;
+}
+body #bc-main #menu .menu-wrap {
+  display: -webkit-flex;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 110px;
+  top: 50%;
+  left: 50%;
+  margin-top: -55px;
+  margin-left: -150px;
+  z-index: 10;
+  text-align: center;
+  background: rgba(0,0,0,0.1);
+  border-radius: 20px;
+}
+body #bc-main #menu .menu-wrap > div > span {
+  display: inline-block;
+  width: 150px;
+}
+body #bc-main #menu .menu-wrap > div > input {
+  text-align: center;
+  margin-left: 10px;
+  width: 100px;
+  margin-top: 5px;
+}
+body #bc-main #menu .menu-wrap button {
+  margin-top: 10px;
+  height: 30px;
+  width: 100px;
+  border-radius: 5px;
+}
+.comment-fade {
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+.comment-fade-enter,
+.comment-fade-leave-to,
+.confmenu-enter,
+.confmenu-leave-to {
+  opacity: 0;
+}
+.comment-fade-enter {
+  transform: translateY(24px) translateX(12px);
+  -webkit-transform: translateY(24px) translateX(12px);
+}
+.comment-fade-leave-to {
+  transform: translateY(-24px);
+  -webkit-transform: translateY(-24px);
+}
