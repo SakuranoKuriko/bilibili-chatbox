@@ -25,6 +25,19 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <script type="text/javascript">
   var bcv;
+  var defconf = {
+    displaytime: 20000,
+    displaymax: 30,
+    colormode: 3,
+    block: {
+      lottery: true,
+      noregular: false,
+      level: 0
+    },
+    showstatus: true,
+    showspanner: true,
+    autoreconn: true
+  };
   var roomdata = <?php echo file_get_contents("https://api.live.bilibili.com/room/v1/Room/room_init?id=".$_GET['roomid']); ?>;
   function getQueryStr(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
@@ -156,17 +169,16 @@
   <div id="bc-main" v-cloak>
     <div class="bc-wrap">
       <transition-group name="comment-fade" tag="div" class="bcs">
-        <div v-for="c in bc" :key="c.id" class="bc">
-          <svg v-if="c.usertype & bchat.usertype.guard==1" version="1.1" xmlns="http://www.w3.org/2000/svg" class="spanner-icon" style="enable-background:new 0 0 283.5 283.5;">
-            <path d="M281.1,60.5c3.3,13.3,3.1,26.7-0.6,40.1c-3.7,13.5-10.5,25.4-20.5,35.7c-11.1,10.7-23.9,17.7-38.5,21
+        <div v-for="c in bc" :key="c.id" class="bc" :class="c.uid==roomhost?'livehost':''">
+          <svg v-if="conf.showspanner && (c.usertype & bchat.usertype.guard)!=0" version="1.1" xmlns="http://www.w3.org/2000/svg" class="spanner-icon" viewBox="0 0 283.5 283.5">
+            <path :fill="conf.spannercolor" d="M281.1,60.5c3.3,13.3,3.1,26.7-0.6,40.1c-3.7,13.5-10.5,25.4-20.5,35.7c-11.1,10.7-23.9,17.7-38.5,21
             	c-14.6,3.3-29.1,2.6-43.4-2.2L60.3,273c-7,7-15.4,10.5-25.2,10.5c-9.8,0-18.1-3.4-24.9-10.2C3.4,266.4,0,258.1,0,248.3
             	c0-9.8,3.5-18.2,10.5-25.2l117.9-118.4c-4.8-14-5.5-28.4-2.2-43.2c3.3-14.8,10.3-27.5,21-38.2c10-10,21.8-16.8,35.4-20.5
             	C196.3-0.8,209.7-1,223,2.4c2.6,0.7,4.2,2.3,4.7,4.7c0.6,2.4-0.1,4.5-1.9,6.4l-40.9,41.5l6.1,37.6l37.6,6.1L270,57.7
             	c1.8-1.8,4-2.5,6.4-1.9C278.8,56.3,280.4,57.9,281.1,60.5z M35.4,261.3c3.7,0,6.8-1.3,9.4-3.9c2.6-2.6,3.9-5.7,3.9-9.4
             	c0-3.7-1.3-6.8-3.9-9.4c-2.6-2.6-5.7-3.9-9.4-3.9s-6.8,1.3-9.4,3.9c-2.6,2.6-3.9,5.7-3.9,9.4c0,3.7,1.3,6.8,3.9,9.4
             	C28.6,260,31.7,261.3,35.4,261.3z"/>
-          </svg>
-          <span class="bctime" :style="{color: c.color}">[{{c.timeline}}]</span><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
+          </svg><span class="bctime" :style="{color: c.color}">[{{c.timeline}}]</span><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
         </div>
       </transition-group>
     </div>
@@ -176,6 +188,8 @@
         <div class="menu-wrap" key="menuwrap">
           <div><label>Max lines</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
           <div><label>Residence time(ms)</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
+          <div><label for="showspanner">Show spanner</label><input type="checkbox" id="showspanner" v-model="conf.showspanner" /></div>
+          <div><label for="showstatus">Show status</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
           <div><label for="autoreconnect">Auto reconnection</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
           <div><label for="blocklotterydm">Block lottery comment</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
           <div><label for="blockinformalusr">Block informal user</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
@@ -185,7 +199,17 @@
             <br />
             <input type="range" v-model="conf.block.level" min="0" max="20" />
           </div>
-          <button @click="applyconf">OK</button>
+          <div class="colormode">
+            <label>Name color</label>
+            <transition name="colormodets">
+              <button :key="'colormode'+conf.colormode" @click="switchcolormode">{{colormodestr}}</button>
+            </transition>
+          </div>
+          <div>
+            <label>Room id</label>
+            <input type="text" v-model="roomid" pattern="[0-9]" min="1" max="99" maxlength="9" />
+            <button key="applyconfbtn" @click="applyconf">OK</button>
+          </div>
         </div>
       </div>
     </transition>
@@ -345,9 +369,12 @@
       if (infoobj[2][6]==1) p.user.type = p.user.type | this.usertype.auth;
       return p;
     },
-    conn: function(roomid){
+    conn: function(roomid, roomhost = -1){
       if (this.ws !== null && this.ws.readyState == this.state.open)
         this.close();
+      bcv.roomid = roomid;
+      bcv.roomhost = roomhost;
+      bcv.bcmsg("Connecting Room:"+bcv.roomid);
       this.ws = new WebSocket(this.server);
       this.ws.binaryType = "arraybuffer"
       this.ws.onopen = () => {
@@ -391,6 +418,11 @@
         this.hbtimer = null;
         if (this.debug)
           console.log("WebSocket: Closed");
+        bcv.bcmsg("Connection closed");
+        if (bcv.conf.autoreconn){
+          bcv.bcmsg("Reconnecting");
+          this.conn(bcv.roomid);
+        }
       }
     },
     send: function(d){
@@ -407,24 +439,14 @@
       this.ws.close();
     }
   }
-  var defconf = {
-    displaytime: 15000,
-    displaymax: 30,
-    colormode: 3,
-    block: {
-      lottery: true,
-      noregular: false,
-      level: 0
-    },
-    showstatus: true,
-    showspanner: true,
-    autoreconn: true
-  };
   bcv = new Vue({
     el: "#bc-main",
     data: {
       bc: [],
+      roomid: 0,
+      roomhost: -1,
       conf: {
+        spannercolor: "#4444ff",
         displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
         displaymax: parseInt(getQueryStr("l")) || defconf.displaymax,
         colormode: parseInt(getQueryStr("c")) || defconf.colormode,
@@ -446,28 +468,46 @@
       showmenu: false,
       bccount: 0
     },
+    computed: {
+      colormodestr: function(){
+        switch(this.conf.colormode){
+          case this.conf.colormodes.bccolor:
+            return "Listener custom color";
+          case this.conf.colormodes.random:
+            return "Random";
+          case this.conf.colormodes.randomdark:
+            return "Random dark color";
+          case this.conf.colormodes.randomlight:
+            return "Random light color";
+        }
+      }
+    },
     methods: {
       bcpush: function(bcobj){
         var c = {
           text: bcobj.comment.text,
+          uid: bcobj.user.uid,
           nickname: bcobj.user.name,
           usertype: bcobj.user.type,
+          color: "#000",
           timeline: dateFtt("hh:mm:ss", new Date(bcobj.comment.time)),
           time: bcobj.comment.time,
           id: "bc"+this.bccount++
         };
-        switch (this.conf.colormode){
-          case this.conf.colormodes.bccolor:
-            c.color = bcobj.comment.color;
-            break;
-          case this.conf.colormodes.random:
-            c.color = rColor();
-            break;
-          case this.conf.colormodes.randomdark:
-            c.color = rDarkColor();
-            break;
-          default:
-            c.color = rLightColor();
+        if (c.uid!=this.roomhost){
+          switch (this.conf.colormode){
+            case this.conf.colormodes.bccolor:
+              c.color = bcobj.comment.color;
+              break;
+            case this.conf.colormodes.random:
+              c.color = rColor();
+              break;
+            case this.conf.colormodes.randomdark:
+              c.color = rDarkColor();
+              break;
+            default:
+              c.color = rLightColor();
+          }
         }
         this.bc.push(c);
         if (this.bc.length<=this.conf.displaymax)
@@ -476,6 +516,8 @@
         return -1;
       },
       bcmsg: function(msg){
+        if (!this.conf.showstatus)
+          return;
         var t = dateFtt("hh:mm:ss", new Date());
         this.bc.push({
           "text": msg,
@@ -492,7 +534,7 @@
         return setTimeout(() => { bcv.bc.shift(); }, to);
       },
       applyconf: function(){
-        newurl = location.pathname+"?roomid="+roomdata.data.room_id;
+        newurl = location.pathname+"?roomid="+this.roomid;
         if (this.conf.displaytime != defconf.displaytime)
           newurl += "&t="+this.conf.displaytime;
         if (this.conf.displaymax != defconf.displaymax)
@@ -506,12 +548,15 @@
         if (this.conf.block.level != defconf.block.level)
           newurl += "&lv="+this.conf.block.level;
         if (this.conf.showstatus != defconf.showstatus)
-          newurl += "&st="+this.conf.block.showstatus?1:0;
+          newurl += "&st="+this.conf.showstatus?1:0;
         if (this.conf.showspanner != defconf.showspanner)
-          newurl += "&sp="+this.conf.block.showspanner?1:0;
+          newurl += "&sp="+this.conf.showspanner?1:0;
         if (this.conf.autoreconn != defconf.autoreconn)
           newurl += "&re="+this.conf.autoreconn?1:0;
         location.href = newurl;
+      },
+      switchcolormode: function(){
+        this.conf.colormode = ++this.conf.colormode%Object.keys(this.conf.colormodes).length;
       }
     }
   });
@@ -523,10 +568,11 @@
     }
   }
 
-  if (roomdata.code==0){
-    bcv.bcmsg("Connecting Room"+roomdata.data.room_id);
-    bchat.conn(roomdata.data.room_id);
-  }
+  bcv.bcmsg("Right click to open the menu");
+  if (roomdata.code==0)
+    bchat.conn(roomdata.data.room_id, roomdata.data.uid);
+  else
+    bcv.bcmsg("Error["+roomdata.code+"]: "+roomdata.msg);
   </script>
 </body>
 <!-- WebSocket

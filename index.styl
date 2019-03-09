@@ -16,10 +16,8 @@ dflex()
 .show
   visibility visible
 
-.spanner-icon
-  background #44f
-  width 30px
-  height @width
+[v-cloak]
+  display none !important
 
 $animetime = 0.5s
 
@@ -54,14 +52,25 @@ body
       .bcs
         dflex()
         flex auto
-        margin 10px
         flex-flow column nowrap
         justify-content flex-end
         font-size 24px
+        word-break break-all
+        overflow hidden
 
         .bc
           flex none
+          border-radius 5px
+          padding 0 6px
+          line-height 32px
           transition(all $animetime)
+
+          &.livehost
+            background #fd0
+
+          .spanner-icon
+            width 26px
+            margin 0 2px -5px 0
     
     #menu
       position fixed
@@ -95,14 +104,14 @@ body
         justify-content center
         align-items center
         width 380px
-        height 240px
+        height 340px
         top 50%
         left 50%
         margin-top -(@height / 2)
         margin-left -(@width / 2)
         z-index 10
         text-align center 
-        background rgba(0,0,0,.1)
+        background rgba(150,150,150,.9)
         border-radius 20px
 
         > div
@@ -116,7 +125,7 @@ body
           > input 
             text-align center
             margin-left 10px
-            width 76px
+            width 80px
             height 16px
             vertical-align middle
           
@@ -141,18 +150,38 @@ body
               border-radius (@height / 2)
           
         button
-          margin-top 2px
+          margin-top 6px
           height 30px
           width 100px
           border-radius 5px
 
+        .colormode
+          position relative
+          height 30px
+          
+          label
+            width initial
+            margin-right 110px
+            line-height 30px
+          
+          button
+            position absolute
+            width 145px
+            height 30px
+            top 0
+            margin 0
+            transition(all $animetime)
+
 .comment-fade
+.colormodets
   transition(all $animetime)
 
 .comment-fade-enter
 .comment-fade-leave-to
 .confmenu-enter
 .confmenu-leave-to
+.colormodets-enter
+.colormodets-leave-to
   opacity 0
 
 .comment-fade-enter
@@ -160,3 +189,9 @@ body
 
 .comment-fade-leave-to
   transform(translateY(-24px))
+
+.colormodets-enter
+  transform(translateY(-24px))
+
+.colormodets-leave-to
+  transform(translateY(24px))

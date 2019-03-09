@@ -4,10 +4,8 @@
 .show {
   visibility: visible;
 }
-.spanner-icon {
-  background: #44f;
-  width: 30px;
-  height: 30px;
+[v-cloak] {
+  display: none !important;
 }
 input,
 button {
@@ -44,15 +42,26 @@ body #bc-main .bc-wrap .bcs {
   display: -webkit-flex;
   display: flex;
   flex: auto;
-  margin: 10px;
   flex-flow: column nowrap;
   justify-content: flex-end;
   font-size: 24px;
+  word-break: break-all;
+  overflow: hidden;
 }
 body #bc-main .bc-wrap .bcs .bc {
   flex: none;
+  border-radius: 5px;
+  padding: 0 6px;
+  line-height: 32px;
   transition: all 0.5s;
   -webkit-transition: all 0.5s;
+}
+body #bc-main .bc-wrap .bcs .bc.livehost {
+  background: #fd0;
+}
+body #bc-main .bc-wrap .bcs .bc .spanner-icon {
+  width: 26px;
+  margin: 0 2px -5px 0;
 }
 body #bc-main #menu {
   position: fixed;
@@ -90,14 +99,14 @@ body #bc-main #menu .menu-wrap {
   justify-content: center;
   align-items: center;
   width: 380px;
-  height: 240px;
+  height: 340px;
   top: 50%;
   left: 50%;
-  margin-top: -120px;
+  margin-top: -170px;
   margin-left: -190px;
   z-index: 10;
   text-align: center;
-  background: rgba(0,0,0,0.1);
+  background: rgba(150,150,150,0.9);
   border-radius: 20px;
 }
 body #bc-main #menu .menu-wrap > div {
@@ -111,7 +120,7 @@ body #bc-main #menu .menu-wrap > div > label {
 body #bc-main #menu .menu-wrap > div > input {
   text-align: center;
   margin-left: 10px;
-  width: 76px;
+  width: 80px;
   height: 16px;
   vertical-align: middle;
 }
@@ -136,19 +145,40 @@ body #bc-main #menu .menu-wrap > div > input[type="range"]::-webkit-slider-runna
   border-radius: 4px;
 }
 body #bc-main #menu .menu-wrap button {
-  margin-top: 2px;
+  margin-top: 6px;
   height: 30px;
   width: 100px;
   border-radius: 5px;
 }
-.comment-fade {
+body #bc-main #menu .menu-wrap .colormode {
+  position: relative;
+  height: 30px;
+}
+body #bc-main #menu .menu-wrap .colormode label {
+  width: initial;
+  margin-right: 110px;
+  line-height: 30px;
+}
+body #bc-main #menu .menu-wrap .colormode button {
+  position: absolute;
+  width: 145px;
+  height: 30px;
+  top: 0;
+  margin: 0;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+.comment-fade,
+.colormodets {
   transition: all 0.5s;
   -webkit-transition: all 0.5s;
 }
 .comment-fade-enter,
 .comment-fade-leave-to,
 .confmenu-enter,
-.confmenu-leave-to {
+.confmenu-leave-to,
+.colormodets-enter,
+.colormodets-leave-to {
   opacity: 0;
 }
 .comment-fade-enter {
@@ -158,4 +188,12 @@ body #bc-main #menu .menu-wrap button {
 .comment-fade-leave-to {
   transform: translateY(-24px);
   -webkit-transform: translateY(-24px);
+}
+.colormodets-enter {
+  transform: translateY(-24px);
+  -webkit-transform: translateY(-24px);
+}
+.colormodets-leave-to {
+  transform: translateY(24px);
+  -webkit-transform: translateY(24px);
 }
