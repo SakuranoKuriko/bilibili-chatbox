@@ -4,12 +4,20 @@
 .show {
   visibility: visible;
 }
+.spanner-icon {
+  background: #44f;
+  width: 30px;
+  height: 30px;
+}
 input,
 button {
   outline: none;
   border: none;
+  margin: 0;
+  padding: 1px 0;
   transition: all 0.1s;
   -webkit-transition: all 0.1s;
+  background: #fff;
 }
 input:hover,
 button:hover,
@@ -81,29 +89,54 @@ body #bc-main #menu .menu-wrap {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 110px;
+  width: 380px;
+  height: 240px;
   top: 50%;
   left: 50%;
-  margin-top: -55px;
-  margin-left: -150px;
+  margin-top: -120px;
+  margin-left: -190px;
   z-index: 10;
   text-align: center;
   background: rgba(0,0,0,0.1);
   border-radius: 20px;
 }
-body #bc-main #menu .menu-wrap > div > span {
+body #bc-main #menu .menu-wrap > div {
+  margin-bottom: 3px;
+}
+body #bc-main #menu .menu-wrap > div > label {
   display: inline-block;
-  width: 150px;
+  width: 250px;
+  text-align: right;
 }
 body #bc-main #menu .menu-wrap > div > input {
   text-align: center;
   margin-left: 10px;
-  width: 100px;
-  margin-top: 5px;
+  width: 76px;
+  height: 16px;
+  vertical-align: middle;
+}
+body #bc-main #menu .menu-wrap > div > input[type="range"] {
+  -webkit-appearance: none;
+  width: 95%;
+  height: 8px;
+  border-radius: 4px;
+  margin: 10px 0;
+  background: #bff;
+}
+body #bc-main #menu .menu-wrap > div > input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #48f;
+  margin-top: -4px;
+}
+body #bc-main #menu .menu-wrap > div > input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 4px;
 }
 body #bc-main #menu .menu-wrap button {
-  margin-top: 10px;
+  margin-top: 2px;
   height: 30px;
   width: 100px;
   border-radius: 5px;

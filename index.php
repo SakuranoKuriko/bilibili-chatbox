@@ -22,7 +22,7 @@
 </script>
 <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<link rel="stylesheet" type="text/css" href="blivedm.css">
+<link rel="stylesheet" type="text/css" href="index.css">
 <script type="text/javascript">
   var bcv;
   var roomdata = <?php echo file_get_contents("https://api.live.bilibili.com/room/v1/Room/room_init?id=".$_GET['roomid']); ?>;
@@ -31,6 +31,12 @@
     var r = window.location.search.substr(1).match(reg);
     if (r != null)
       return unescape(r[2]);
+    return null;
+  }
+  function getQuerybool(name){
+    var d = getQueryStr(name);
+    if (d!==null)
+      return parseInt(d)!==0;
     return null;
   }
   color = {
@@ -151,7 +157,7 @@
     <div class="bc-wrap">
       <transition-group name="comment-fade" tag="div" class="bcs">
         <div v-for="c in bc" :key="c.id" class="bc">
-          <svg v-if="c.usertype & bchat.usertype.guard==1" version="1.1" xmlns="http://www.w3.org/2000/svg" style="enable-background:new 0 0 283.5 283.5;">
+          <svg v-if="c.usertype & bchat.usertype.guard==1" version="1.1" xmlns="http://www.w3.org/2000/svg" class="spanner-icon" style="enable-background:new 0 0 283.5 283.5;">
             <path d="M281.1,60.5c3.3,13.3,3.1,26.7-0.6,40.1c-3.7,13.5-10.5,25.4-20.5,35.7c-11.1,10.7-23.9,17.7-38.5,21
             	c-14.6,3.3-29.1,2.6-43.4-2.2L60.3,273c-7,7-15.4,10.5-25.2,10.5c-9.8,0-18.1-3.4-24.9-10.2C3.4,266.4,0,258.1,0,248.3
             	c0-9.8,3.5-18.2,10.5-25.2l117.9-118.4c-4.8-14-5.5-28.4-2.2-43.2c3.3-14.8,10.3-27.5,21-38.2c10-10,21.8-16.8,35.4-20.5
@@ -168,9 +174,18 @@
       <div id="menu" :class="showmenu?'show':'hide'">
         <div class="menu-mask" key="menumask" @click="showmenu=false"></div>
         <div class="menu-wrap" key="menuwrap">
-          <div><span>Max lines</span><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" autocomplete="off"/></div>
-          <div><span>Residence time(ms)</span><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" autocomplete="off"/></div>
-          <button @click="saveconf">OK</button>
+          <div><label>Max lines</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
+          <div><label>Residence time(ms)</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
+          <div><label for="autoreconnect">Auto reconnection</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
+          <div><label for="blocklotterydm">Block lottery comment</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
+          <div><label for="blockinformalusr">Block informal user</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
+          <div>
+            <label>Users with blocking levels below</label>
+            <input type="text" v-model="conf.block.level" pattern="[0-9]" min="0" max="99" maxlength="2" />
+            <br />
+            <input type="range" v-model="conf.block.level" min="0" max="20" />
+          </div>
+          <button @click="applyconf">OK</button>
         </div>
       </div>
     </transition>
@@ -392,26 +407,41 @@
       this.ws.close();
     }
   }
+  var defconf = {
+    displaytime: 15000,
+    displaymax: 30,
+    colormode: 3,
+    block: {
+      lottery: true,
+      noregular: false,
+      level: 0
+    },
+    showstatus: true,
+    showspanner: true,
+    autoreconn: true
+  };
   bcv = new Vue({
     el: "#bc-main",
     data: {
       bc: [],
       conf: {
-        displaytime: parseInt(getQueryStr("time")) || 15000,
-        displaymax: parseInt(getQueryStr("line")) || 30,
-        colormode: 3,
+        displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
+        displaymax: parseInt(getQueryStr("l")) || defconf.displaymax,
+        colormode: parseInt(getQueryStr("c")) || defconf.colormode,
+        block: {
+          lottery: getQuerybool("nl")!==null?getQuerybool("nl"):defconf.block.lottery, //屏蔽抽奖弹幕
+          noregular: getQuerybool("nr")!==null?getQuerybool("nr"):defconf.block.noregular, //屏蔽非正式会员
+          level: parseInt(getQueryStr("lv")) || defconf.block.level //屏蔽等级不足用户
+        },
+        showstatus: getQuerybool("st")!==null?getQuerybool("st"):defconf.showstatus,
+        showspanner: getQuerybool("sp")!==null?getQuerybool("sp"):defconf.showspanner,
+        autoreconn: getQuerybool("re")!==null?getQuerybool("re"):defconf.autoreconn,
         colormodes: {
           bccolor: 0,
           random: 1,
           randomdark: 2,
           randomlight: 3
-        },
-        block: {
-          lottery: true, //屏蔽抽奖弹幕
-          noregular: false, //屏蔽非正式会员
-          level: 0 //屏蔽等级不足用户
-        },
-        showstatus: true
+        }
       },
       showmenu: false,
       bccount: 0
@@ -449,7 +479,7 @@
         var t = dateFtt("hh:mm:ss", new Date());
         this.bc.push({
           "text": msg,
-          "nickname": "System",
+          "nickname": "<System>",
           "timeline": t,
           "color": "#ff0000",
           "id": "sys"+this.bccount++
@@ -461,8 +491,27 @@
         var to = t!=undefined?t:this.conf.displaytime;
         return setTimeout(() => { bcv.bc.shift(); }, to);
       },
-      saveconf: function(){
-        location.href = location.pathname+"?time="+this.conf.displaytime+"&line="+this.conf.displaymax;
+      applyconf: function(){
+        newurl = location.pathname+"?roomid="+roomdata.data.room_id;
+        if (this.conf.displaytime != defconf.displaytime)
+          newurl += "&t="+this.conf.displaytime;
+        if (this.conf.displaymax != defconf.displaymax)
+          newurl += "&l="+this.conf.displaymax;
+        if (this.conf.colormode != defconf.colormode)
+          newurl += "&c="+this.conf.colormode;
+        if (this.conf.block.lottery != defconf.block.lottery)
+          newurl += "&nl="+this.conf.block.lottery?1:0;
+        if (this.conf.block.noregular != defconf.block.noregular)
+          newurl += "&nr="+this.conf.block.noregular?1:0;
+        if (this.conf.block.level != defconf.block.level)
+          newurl += "&lv="+this.conf.block.level;
+        if (this.conf.showstatus != defconf.showstatus)
+          newurl += "&st="+this.conf.block.showstatus?1:0;
+        if (this.conf.showspanner != defconf.showspanner)
+          newurl += "&sp="+this.conf.block.showspanner?1:0;
+        if (this.conf.autoreconn != defconf.autoreconn)
+          newurl += "&re="+this.conf.autoreconn?1:0;
+        location.href = newurl;
       }
     }
   });
@@ -472,6 +521,11 @@
       e.preventDefault();
       bcv.showmenu = true;
     }
+  }
+
+  if (roomdata.code==0){
+    bcv.bcmsg("Connecting Room"+roomdata.data.room_id);
+    bchat.conn(roomdata.data.room_id);
   }
   </script>
 </body>
