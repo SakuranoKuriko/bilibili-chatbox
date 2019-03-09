@@ -265,8 +265,7 @@
       };
       this.read(new Blob([pbuf.slice(16, obj.size)]), (t)=>{
         obj.data = t;
-        var tobj = obj;
-        setTimeout(cb(tobj),100);
+        cb(obj);
       }, true);
       if (obj.size<pbuf.byteLength)
         this.un(pbuf.slice(obj.size), cb);
@@ -518,6 +517,7 @@
           }
         }
         this.bc.push(c);
+        this.$forceUpdate();
         if (this.bc.length<=this.conf.displaymax)
           return this.bcshift();
         this.bcshift(1);
