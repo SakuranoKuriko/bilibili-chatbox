@@ -215,7 +215,7 @@
             <input type="text" v-model="conf.timeformat" />
           </div>
           <button key="applyconfbtn" @click="applyconf">OK</button>
-          <a id="about" href="https://github.com/SakuranoKuriko/bilibili-chatbox">Source code</a>
+          <a id="about" target="_blank" href="https://github.com/SakuranoKuriko/bilibili-chatbox">Source code</a>
         </div>
       </div>
     </transition>
