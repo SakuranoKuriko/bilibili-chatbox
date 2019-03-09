@@ -266,7 +266,7 @@
       this.read(new Blob([pbuf.slice(16, obj.size)]), (t)=>{
         obj.data = t;
         var tobj = obj;
-        setTimeout(()=>{cb(obj);},100);
+        setTimeout(()=>{cb(tobj);},1);
       }, true);
       if (obj.size<pbuf.byteLength)
         this.un(pbuf.slice(obj.size), cb);
