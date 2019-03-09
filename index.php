@@ -171,7 +171,7 @@
     <div class="bc-wrap">
       <transition-group name="comment-fade" tag="div" class="bcs">
         <div v-for="c in bc" :key="c.id" class="bc" :class="c.uid==roomhost?'livehost':''">
-          <svg v-if="conf.showspanner && (c.usertype & bchat.usertype.guard)!=0" version="1.1" xmlns="http://www.w3.org/2000/svg" class="spanner-icon" viewBox="0 0 283.5 283.5">
+        <span class="bctime" v-if="conf.timeformat!=''" :style="{color: c.color}">[{{c.timeline}}]</span><svg v-if="conf.showspanner && (c.usertype & bchat.usertype.guard)!=0" version="1.1" xmlns="http://www.w3.org/2000/svg" class="spanner-icon" viewBox="0 0 283.5 283.5">
             <path :fill="conf.spannercolor" d="M281.1,60.5c3.3,13.3,3.1,26.7-0.6,40.1c-3.7,13.5-10.5,25.4-20.5,35.7c-11.1,10.7-23.9,17.7-38.5,21
             	c-14.6,3.3-29.1,2.6-43.4-2.2L60.3,273c-7,7-15.4,10.5-25.2,10.5c-9.8,0-18.1-3.4-24.9-10.2C3.4,266.4,0,258.1,0,248.3
             	c0-9.8,3.5-18.2,10.5-25.2l117.9-118.4c-4.8-14-5.5-28.4-2.2-43.2c3.3-14.8,10.3-27.5,21-38.2c10-10,21.8-16.8,35.4-20.5
@@ -179,7 +179,7 @@
             	c1.8-1.8,4-2.5,6.4-1.9C278.8,56.3,280.4,57.9,281.1,60.5z M35.4,261.3c3.7,0,6.8-1.3,9.4-3.9c2.6-2.6,3.9-5.7,3.9-9.4
             	c0-3.7-1.3-6.8-3.9-9.4c-2.6-2.6-5.7-3.9-9.4-3.9s-6.8,1.3-9.4,3.9c-2.6,2.6-3.9,5.7-3.9,9.4c0,3.7,1.3,6.8,3.9,9.4
             	C28.6,260,31.7,261.3,35.4,261.3z"/>
-          </svg><span class="bctime" v-if="conf.timeformat!=''" :style="{color: c.color}">[{{c.timeline}}]</span><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
+          </svg><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
         </div>
       </transition-group>
     </div>
