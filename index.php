@@ -26,6 +26,7 @@
 <script type="text/javascript">
   var bcv;
   var defconf = {
+    timeformat: "hh:mm:ss",
     displaytime: 20000,
     displaymax: 30,
     colormode: 3,
@@ -42,7 +43,7 @@
   function getQueryStr(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
     var r = window.location.search.substr(1).match(reg);
-    if (r != null && r[2] != "")
+    if (r != null)
       return unescape(r[2]);
     return null;
   }
@@ -178,7 +179,7 @@
             	c1.8-1.8,4-2.5,6.4-1.9C278.8,56.3,280.4,57.9,281.1,60.5z M35.4,261.3c3.7,0,6.8-1.3,9.4-3.9c2.6-2.6,3.9-5.7,3.9-9.4
             	c0-3.7-1.3-6.8-3.9-9.4c-2.6-2.6-5.7-3.9-9.4-3.9s-6.8,1.3-9.4,3.9c-2.6,2.6-3.9,5.7-3.9,9.4c0,3.7,1.3,6.8,3.9,9.4
             	C28.6,260,31.7,261.3,35.4,261.3z"/>
-          </svg><span class="bctime" :style="{color: c.color}">[{{c.timeline}}]</span><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
+          </svg><span class="bctime" v-if="conf.timeformat!=''" :style="{color: c.color}">[{{c.timeline}}]</span><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
         </div>
       </transition-group>
     </div>
@@ -189,7 +190,7 @@
           <div><label>Max lines</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
           <div><label>Residence time(ms)</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
           <div><label for="showspanner">Show spanner</label><input type="checkbox" id="showspanner" v-model="conf.showspanner" /></div>
-          <div><label for="showstatus">Show status</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
+          <div><label for="showstatus">Show status & system msg</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
           <div><label for="autoreconnect">Auto reconnection</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
           <div><label for="blocklotterydm">Block lottery comment</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
           <div><label for="blockinformalusr">Block informal user</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
@@ -205,11 +206,15 @@
               <button :key="'colormode'+conf.colormode" @click="switchcolormode">{{colormodestr}}</button>
             </transition>
           </div>
-          <div>
+          <div class="roomid">
             <label>Room id</label>
             <input type="text" v-model="roomid" pattern="[0-9]" min="1" max="99" maxlength="9" />
-            <button key="applyconfbtn" @click="applyconf">OK</button>
           </div>
+          <div class="timeftt">
+            <label>Time format(Empty to No display)</label><br />
+            <input type="text" v-model="conf.timeformat" />
+          </div>
+          <button key="applyconfbtn" @click="applyconf">OK</button>
         </div>
       </div>
     </transition>
@@ -447,6 +452,7 @@
       roomhost: -1,
       conf: {
         spannercolor: "#4444ff",
+        timeformat: getQueryStr("tf")!==null?getQueryStr("tf"):defconf.timeformat,
         displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
         displaymax: parseInt(getQueryStr("l")) || defconf.displaymax,
         colormode: getQueryStr("c")!==null?parseInt(getQueryStr("c")):defconf.colormode,
@@ -490,7 +496,7 @@
           nickname: bcobj.user.name,
           usertype: bcobj.user.type,
           color: "#000",
-          timeline: dateFtt("hh:mm:ss", new Date(bcobj.comment.time)),
+          timeline: this.conf.timeformat!=""?dateFtt(this.conf.timeformat, new Date(bcobj.comment.time)):"",
           time: bcobj.comment.time,
           id: "bc"+this.bccount++
         };
@@ -518,13 +524,13 @@
       bcmsg: function(msg){
         if (!this.conf.showstatus)
           return;
-        var t = dateFtt("hh:mm:ss", new Date());
+        var t = this.conf.timeformat!=""?dateFtt(this.conf.timeformat, new Date()):"";
         this.bc.push({
-          "text": msg,
-          "nickname": "<System>",
-          "timeline": t,
-          "color": "#ff0000",
-          "id": "sys"+this.bccount++
+          text: msg,
+          nickname: "<System>",
+          timeline: t,
+          color: "#ff0000",
+          id: "sys"+this.bccount++
         })
         console.info("["+t+"]"+msg);
         return this.bcshift();
@@ -553,6 +559,8 @@
           newurl += "&sp="+(this.conf.showspanner?1:0);
         if (this.conf.autoreconn != defconf.autoreconn)
           newurl += "&re="+(this.conf.autoreconn?1:0);
+        if (this.conf.timeformat != defconf.timeformat)
+          newurl += "&tf="+escape(this.conf.timeformat);
         location.href = newurl;
       },
       switchcolormode: function(){

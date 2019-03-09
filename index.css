@@ -99,10 +99,10 @@ body #bc-main #menu .menu-wrap {
   justify-content: center;
   align-items: center;
   width: 380px;
-  height: 340px;
+  height: 380px;
   top: 50%;
   left: 50%;
-  margin-top: -170px;
+  margin-top: -190px;
   margin-left: -190px;
   z-index: 10;
   text-align: center;
@@ -122,6 +122,7 @@ body #bc-main #menu .menu-wrap > div > input {
   margin-left: 10px;
   width: 80px;
   height: 16px;
+  font-size: 15px;
   vertical-align: middle;
 }
 body #bc-main #menu .menu-wrap > div > input[type="range"] {
@@ -167,6 +168,23 @@ body #bc-main #menu .menu-wrap .colormode button {
   margin: 0;
   transition: all 0.5s;
   -webkit-transition: all 0.5s;
+}
+body #bc-main #menu .menu-wrap .roomid {
+  margin-top: 2px;
+}
+body #bc-main #menu .menu-wrap .roomid label {
+  width: initial;
+}
+body #bc-main #menu .menu-wrap .timeftt {
+  width: 280px;
+}
+body #bc-main #menu .menu-wrap .timeftt label {
+  width: 100%;
+  text-align: center;
+}
+body #bc-main #menu .menu-wrap .timeftt input {
+  width: 100%;
+  margin: 0;
 }
 .comment-fade,
 .colormodets {
