@@ -295,7 +295,7 @@
           </div>
           <button key="applyconfbtn" @click="applyconf">OK</button>
           <a id="about" target="_blank" href="https://github.com/SakuranoKuriko/bilibili-chatbox">Source code</a>
-          <select class="langsel" v-mode="conf.lang">
+          <select class="langsel" v-mode="conf.lang" @change="loadlang">
             <option v-for="l in langs" :value="l.code">{{l.text}}</option>
           </select>
         </div>
