@@ -49,7 +49,7 @@
       text: "日本語(JP)"
     },
     en: {
-      code: "en"
+      code: "en",
       text: "English(EN)"
     }
   }
