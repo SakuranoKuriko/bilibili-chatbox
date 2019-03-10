@@ -39,7 +39,7 @@
     showspanner: true,
     autoreconn: true
   };
-  var langs: {
+  var langs = {
     zh: {
       code: "cn",
       text: "繁体中文(CN)"
@@ -53,7 +53,7 @@
       text: "English(EN)"
     }
   }
-  var tips= {};
+  var tips = {};
   tips[langs.zh.code] = {
       maxlines: "显示行数上限",
       restime: "弹幕停留时间",
