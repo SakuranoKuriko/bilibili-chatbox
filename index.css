@@ -98,12 +98,12 @@ body #bc-main #menu .menu-wrap {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  width: 380px;
+  width: 420px;
   height: 380px;
   top: 50%;
   left: 50%;
   margin-top: -190px;
-  margin-left: -190px;
+  margin-left: -210px;
   z-index: 10;
   text-align: center;
   background: rgba(150,150,150,0.9);
@@ -115,7 +115,7 @@ body #bc-main #menu .menu-wrap > div {
 }
 body #bc-main #menu .menu-wrap > div > label {
   display: inline-block;
-  width: 250px;
+  width: 300px;
   text-align: right;
 }
 body #bc-main #menu .menu-wrap > div > input {
@@ -152,6 +152,9 @@ body #bc-main #menu .menu-wrap button {
   width: 100px;
   border-radius: 5px;
 }
+body #bc-main #menu .menu-wrap .blocklevel input[type="range"] {
+  margin-top: 5px;
+}
 body #bc-main #menu .menu-wrap .colormode {
   position: relative;
   height: 30px;
@@ -177,7 +180,7 @@ body #bc-main #menu .menu-wrap .roomid label {
   width: initial;
 }
 body #bc-main #menu .menu-wrap .timeftt {
-  width: 280px;
+  width: 85%;
 }
 body #bc-main #menu .menu-wrap .timeftt label {
   width: 100%;

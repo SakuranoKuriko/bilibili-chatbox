@@ -82,7 +82,7 @@
       showspanner: "スパナの表示",
       showstatus: "ステータスの表示",
       autoreconn: "自動再接続",
-      blocklotterydm: "プレゼントで自動的に送ったコメントをブロック",
+      blocklotterydm: "プレゼントコメントをブロック",
       blockinformalusr: "非正式メンバーをブロック",
       blocklevel: "レベルが右より低いユーザーをブロック",
       colormode: "カラーモード",
@@ -91,7 +91,7 @@
       randomdark: "ランダム暗い色",
       randomlight: "ランダム明るい色",
       roomid: "ルームID",
-      timeftt: "時間フォーマット(空欄にすると時間を非表示)",
+      timeftt: "時間フォーマット(空欄にすると時間非表示)",
       connecting: "接続中 Room:",
       connectclosed: "接続が切れました",
       reconnecting: "再接続中",
@@ -273,9 +273,8 @@
           <div><label for="autoreconnect">{{tips.autoreconn}}</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
           <div><label for="blocklotterydm">{{tips.blocklotterydm}}</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
           <div><label for="blockinformalusr">{{tips.blockinformalusr}}</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
-          <div>
-            <label>{{tips.blocklevel}}</label>
-            <input type="text" v-model="conf.block.level" pattern="[0-9]" min="0" max="99" maxlength="2" />
+          <div class="blocklevel">
+            <label>{{tips.blocklevel}}</label><input type="text" v-model="conf.block.level" pattern="[0-9]" min="0" max="99" maxlength="2" />
             <br />
             <input type="range" v-model="conf.block.level" min="0" max="20" />
           </div>
@@ -295,7 +294,7 @@
           </div>
           <button key="applyconfbtn" @click="applyconf">OK</button>
           <a id="about" target="_blank" href="https://github.com/SakuranoKuriko/bilibili-chatbox">Source code</a>
-          <select class="langsel" v-mode="conf.lang">
+          <select class="langsel" v-model="conf.lang">
             <option v-for="l in langs" :value="l.code">{{l.text}}</option>
           </select>
         </div>
