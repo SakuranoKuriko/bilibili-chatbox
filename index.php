@@ -295,7 +295,7 @@
           </div>
           <button key="applyconfbtn" @click="applyconf">OK</button>
           <a id="about" target="_blank" href="https://github.com/SakuranoKuriko/bilibili-chatbox">Source code</a>
-          <select class="langsel" v-mode="conf.lang" @change="loadlang">
+          <select class="langsel" v-mode="conf.lang">
             <option v-for="l in langs" :value="l.code">{{l.text}}</option>
           </select>
         </div>
@@ -572,12 +572,17 @@
           case this.conf.colormodes.randomlight:
             return this.tips.randomlight;
         }
+      },
+      lang: function(){
+        return this.conf.lang;
       }
     },
+    watch: {
+      lang: function(){
+        this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang]);
+      }
+    }
     methods: {
-      loadlang: function(){
-        this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang])
-      },
       bcpush: function(bcobj){
         var c = {
           text: bcobj.comment.text,
