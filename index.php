@@ -25,20 +25,6 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <script type="text/javascript">
   var bcv;
-  var defconf = {
-    timeformat: "hh:mm:ss",
-    displaytime: 20000,
-    displaymax: 30,
-    colormode: 3,
-    block: {
-      lottery: true,
-      noregular: false,
-      level: 0
-    },
-    showstatus: true,
-    showspanner: true,
-    autoreconn: true
-  };
   var langs = {
     zh: {
       code: "cn",
@@ -53,8 +39,23 @@
       text: "English(EN)"
     }
   }
-  var tips = {};
-  tips[langs.zh.code] = {
+  var defconf = {
+    lang: langs.en.code,
+    timeformat: "hh:mm:ss",
+    displaytime: 20000,
+    displaymax: 30,
+    colormode: 3,
+    block: {
+      lottery: true,
+      noregular: false,
+      level: 0
+    },
+    showstatus: true,
+    showspanner: true,
+    autoreconn: true
+  };
+  var tipsp = {};
+  tipsp[langs.zh.code] = {
       maxlines: "顯示行數上限",
       restime: "單條停留時間",
       showspanner: "以扳手標出房管",
@@ -75,7 +76,7 @@
       reconnecting: "重連中",
       hintmenu: "右擊打開菜單"
     };
-  tips[langs.jp.code] = {
+  tipsp[langs.jp.code] = {
       maxlines: "表示するコメント数の上限",
       restime: "コメントの表示時間",
       showspanner: "スパナの表示",
@@ -90,13 +91,13 @@
       randomdark: "ランダム暗い色",
       randomlight: "ランダム明るい色",
       roomid: "ルームID",
-      timeftt: "時間フォーマット(空欄にすると時間非表示)",
+      timeftt: "時間フォーマット(空欄にすると時間を非表示)",
       connecting: "接続中 Room:",
       connectclosed: "接続が切れました",
       reconnecting: "再接続中",
       hintmenu: "右クリックでメニューを開く"
     };
-  tips[langs.en.code] = {
+  tipsp[langs.en.code] = {
       maxlines: "Max lines",
       restime: "Residence time(ms)",
       showspanner: "Show spanner",
@@ -265,31 +266,31 @@
       <div id="menu" :class="showmenu?'show':'hide'">
         <div class="menu-mask" key="menumask" @click="showmenu=false"></div>
         <div class="menu-wrap" key="menuwrap">
-          <div><label>{{tips[conf.lang].maxlines}}</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
-          <div><label>{{tips[conf.lang].restime}}</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
-          <div><label for="showspanner">{{tips[conf.lang].showspanner}}</label><input type="checkbox" id="showspanner" v-model="conf.showspanner" /></div>
-          <div><label for="showstatus">{{tips[conf.lang].showstatus}}</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
-          <div><label for="autoreconnect">{{tips[conf.lang].autoreconn}}</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
-          <div><label for="blocklotterydm">{{tips[conf.lang].blocklotterydm}}</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
-          <div><label for="blockinformalusr">{{tips[conf.lang].blockinformalusr}}</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
+          <div><label>{{tips.maxlines}}</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
+          <div><label>{{tips.restime}}</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
+          <div><label for="showspanner">{{tips.showspanner}}</label><input type="checkbox" id="showspanner" v-model="conf.showspanner" /></div>
+          <div><label for="showstatus">{{tips.showstatus}}</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
+          <div><label for="autoreconnect">{{tips.autoreconn}}</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
+          <div><label for="blocklotterydm">{{tips.blocklotterydm}}</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
+          <div><label for="blockinformalusr">{{tips.blockinformalusr}}</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
           <div>
-            <label>{{tips[conf.lang].blocklevel}}</label>
+            <label>{{tips.blocklevel}}</label>
             <input type="text" v-model="conf.block.level" pattern="[0-9]" min="0" max="99" maxlength="2" />
             <br />
             <input type="range" v-model="conf.block.level" min="0" max="20" />
           </div>
           <div class="colormode">
-            <label>{{tips[conf.lang].colormode}}</label>
+            <label>{{tips.colormode}}</label>
             <transition name="colormodets">
               <button :key="'colormode'+conf.colormode" @click="switchcolormode">{{colormodestr}}</button>
             </transition>
           </div>
           <div class="roomid">
-            <label>{{tips[conf.lang].roomid}}</label>
+            <label>{{tips.roomid}}</label>
             <input type="text" v-model="roomid" pattern="[0-9]" min="1" max="99" maxlength="9" />
           </div>
           <div class="timeftt">
-            <label>{{tips[conf.lang].timeftt}}</label><br />
+            <label>{{tips.timeftt}}</label><br />
             <input type="text" v-model="conf.timeformat" />
           </div>
           <button key="applyconfbtn" @click="applyconf">OK</button>
@@ -462,7 +463,7 @@
         this.close();
       bcv.roomid = roomid;
       bcv.roomhost = roomhost;
-      bcv.bcmsg(tips[bcv.conf.lang].connecting+bcv.roomid);
+      bcv.bcmsg(bcv.tips.connecting+bcv.roomid);
       this.ws = new WebSocket(this.server);
       this.ws.binaryType = "arraybuffer"
       this.ws.onopen = () => {
@@ -506,9 +507,9 @@
         this.hbtimer = null;
         if (this.debug)
           console.log("WebSocket: Closed");
-        bcv.bcmsg(tips[bcv.conf.lang].connectclosed);
+        bcv.bcmsg(bcv.tips.connectclosed);
         if (bcv.conf.autoreconn){
-          bcv.bcmsg(tips[bcv.conf.lang].reconnecting);
+          bcv.bcmsg(bcv.tips.reconnecting);
           this.conn(bcv.roomid);
         }
       }
@@ -533,8 +534,9 @@
       bc: [],
       roomid: 0,
       roomhost: -1,
+      tips: {},
       conf: {
-        lang: getQueryStr("la") || langs.en.code,
+        lang: getQueryStr("la") || defconf.lang,
         spannercolor: "#4444ff",
         timeformat: getQueryStr("tf")!==null?getQueryStr("tf"):defconf.timeformat,
         displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
@@ -562,17 +564,20 @@
       colormodestr: function(){
         switch(this.conf.colormode){
           case this.conf.colormodes.bccolor:
-            return tips[bcv.conf.lang].listenercustom;
+            return this.tips.listenercustom;
           case this.conf.colormodes.random:
-            return tips[bcv.conf.lang].random;
+            return this.tips.random;
           case this.conf.colormodes.randomdark:
-            return tips[bcv.conf.lang].randomdark;
+            return this.tips.randomdark;
           case this.conf.colormodes.randomlight:
-            return tips[bcv.conf.lang].randomlight;
+            return this.tips.randomlight;
         }
       }
     },
     methods: {
+      loadlang: function(){
+        this.tips = Object.assign({}, this.obj, tips[this.conf.lang])
+      },
       bcpush: function(bcobj){
         var c = {
           text: bcobj.comment.text,
@@ -646,6 +651,8 @@
           newurl += "&re="+(this.conf.autoreconn?1:0);
         if (this.conf.timeformat != defconf.timeformat)
           newurl += "&tf="+escape(this.conf.timeformat);
+        if (this.conf.lang != defconf.lang)
+          newurl += "&la="+this.conf.lang;
         location.href = newurl;
       },
       switchcolormode: function(){
@@ -661,7 +668,7 @@
     }
   }
 
-  bcv.bcmsg(tips[bcv.conf.lang].hintmenu);
+  bcv.bcmsg(bcv.tips.hintmenu);
   if (roomdata.code==0)
     bchat.conn(roomdata.data.room_id, roomdata.data.uid);
   else
