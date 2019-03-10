@@ -578,10 +578,13 @@
     },
     watch: {
       lang: function(){
-        this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang]);
+        this.loadlang();
       }
     },
     methods: {
+      loadlang: {
+        this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang]);
+      },
       bcpush: function(bcobj){
         var c = {
           text: bcobj.comment.text,
@@ -672,6 +675,7 @@
     }
   }
 
+  bcv.loadlang();
   bcv.bcmsg(bcv.tips.hintmenu);
   if (roomdata.code==0)
     bchat.conn(roomdata.data.room_id, roomdata.data.uid);
