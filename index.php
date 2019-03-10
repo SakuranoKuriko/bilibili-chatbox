@@ -581,7 +581,7 @@
       lang: function(){
         this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang]);
       }
-    }
+    },
     methods: {
       bcpush: function(bcobj){
         var c = {
