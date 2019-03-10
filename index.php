@@ -576,7 +576,7 @@
     },
     methods: {
       loadlang: function(){
-        this.tips = Object.assign({}, this.obj, tips[this.conf.lang])
+        this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang])
       },
       bcpush: function(bcobj){
         var c = {
