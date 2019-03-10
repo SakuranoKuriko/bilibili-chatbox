@@ -110,11 +110,6 @@ body #bc-main #menu .menu-wrap {
   border-radius: 20px;
   position: relative;
 }
-body #bc-main #menu .menu-wrap #about {
-  position: absolute;
-  left: 24px;
-  bottom: 14px;
-}
 body #bc-main #menu .menu-wrap > div {
   margin-bottom: 3px;
 }
@@ -191,6 +186,16 @@ body #bc-main #menu .menu-wrap .timeftt label {
 body #bc-main #menu .menu-wrap .timeftt input {
   width: 100%;
   margin: 0;
+}
+body #bc-main #menu .menu-wrap #about {
+  position: absolute;
+  left: 24px;
+  bottom: 14px;
+}
+body #bc-main #menu .menu-wrap .langsel {
+  position: absolute;
+  right: 24px;
+  bottom: 14px;
 }
 .comment-fade,
 .colormodets {

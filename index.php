@@ -39,6 +39,84 @@
     showspanner: true,
     autoreconn: true
   };
+  var langs: {
+    zh: {
+      code: "cn",
+      text: "繁体中文(CN)"
+    },
+    jp: {
+      code: "jp",
+      text: "日本語(JP)"
+    },
+    en: {
+      code: "en"
+      text: "English(EN)"
+    }
+  }
+  var tips= {};
+  tips[langs.zh.code] = {
+      maxlines: "显示行数上限",
+      restime: "弹幕停留时间",
+      showspanner: "以扳手图标标出房管",
+      showstatus: "显示状态",
+      autoreconn: "自动断线重连",
+      blocklotterydm: "屏蔽抽奖弹幕",
+      blockinformalusr: "屏蔽非正式会员",
+      blocklevel: "屏蔽用户 当等级低于",
+      colormode: "显示颜色",
+      listenercustom: "按弹幕颜色",
+      random: "随机",
+      randomdark: "随机暗色",
+      randomlight: "随机亮色",
+      roomid: "房间号",
+      timeftt: "时间格式(留空则不显示时间)",
+      connecting: "正在连接房间:",
+      connectclosed: "连接中断",
+      reconnecting: "重连中",
+      hintmenu: "右键打开菜单"
+    };
+  tips[langs.jp.code] = {
+      maxlines: "表示するコメント数の上限",
+      restime: "コメントの表示時間",
+      showspanner: "スパナの表示",
+      showstatus: "ステータスの表示",
+      autoreconn: "自動再接続",
+      blocklotterydm: "プレゼントで自動的に送ったコメントをブロック",
+      blockinformalusr: "非正式メンバーをブロック",
+      blocklevel: "レベルが右より低いユーザーをブロック",
+      colormode: "カラーモード",
+      listenercustom: "コメントの色のまま",
+      random: "ランダム",
+      randomdark: "ランダム暗い色",
+      randomlight: "ランダム明るい色",
+      roomid: "ルームID",
+      timeftt: "時間フォーマット(空欄にすると時間非表示)",
+      connecting: "接続中 Room:",
+      connectclosed: "接続が切れました",
+      reconnecting: "再接続中",
+      hintmenu: "右クリックでメニューを開く"
+    };
+  tips[langs.en.code] = {
+      maxlines: "Max lines",
+      restime: "Residence time(ms)",
+      showspanner: "Show spanner",
+      showstatus: "Show status & system msg",
+      autoreconn: "Auto reconnection",
+      blocklotterydm: "Block lottery comment",
+      blockinformalusr: "Block informal user",
+      blocklevel: "Users with blocking levels below",
+      colormode: "Color mode",
+      listenercustom: "Listener custom color",
+      random: "Random",
+      randomdark: "Random dark color",
+      randomlight: "Random light color",
+      roomid: "Room id",
+      timeftt: "Time format(Empty to No display)",
+      connecting: "Connecting Room:",
+      connectclosed: "Connection closed",
+      reconnecting: "Reconnecting",
+      hintmenu: "Right click to open the menu"
+    };
   var roomdata = <?php echo file_get_contents("https://api.live.bilibili.com/room/v1/Room/room_init?id=".$_GET['roomid']); ?>;
   function getQueryStr(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
@@ -187,35 +265,38 @@
       <div id="menu" :class="showmenu?'show':'hide'">
         <div class="menu-mask" key="menumask" @click="showmenu=false"></div>
         <div class="menu-wrap" key="menuwrap">
-          <div><label>Max lines</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
-          <div><label>Residence time(ms)</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
-          <div><label for="showspanner">Show spanner</label><input type="checkbox" id="showspanner" v-model="conf.showspanner" /></div>
-          <div><label for="showstatus">Show status & system msg</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
-          <div><label for="autoreconnect">Auto reconnection</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
-          <div><label for="blocklotterydm">Block lottery comment</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
-          <div><label for="blockinformalusr">Block informal user</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
+          <div><label>{{tips[conf.lang].maxlines}}</label><input type="text" v-model="conf.displaymax" pattern="[0-9]" min="1" max="99" maxlength="2" /></div>
+          <div><label>{{tips[conf.lang].restime}}</label><input type="text" v-model="conf.displaytime" pattern="[0-9]" min="1" max="999999999" maxlength="9" /></div>
+          <div><label for="showspanner">{{tips[conf.lang].showspanner}}</label><input type="checkbox" id="showspanner" v-model="conf.showspanner" /></div>
+          <div><label for="showstatus">{{tips[conf.lang].showstatus}}</label><input type="checkbox" id="showstatus" v-model="conf.showstatus" /></div>
+          <div><label for="autoreconnect">{{tips[conf.lang].autoreconn}}</label><input type="checkbox" id="autoreconnect" v-model="conf.autoreconn" /></div>
+          <div><label for="blocklotterydm">{{tips[conf.lang].blocklotterydm}}</label><input type="checkbox" id="blocklotterydm" v-model="conf.block.lottery" /></div>
+          <div><label for="blockinformalusr">{{tips[conf.lang].blockinformalusr}}</label><input type="checkbox" id="blockinformalusr" v-model="conf.block.noregular" /></div>
           <div>
-            <label>Users with blocking levels below</label>
+            <label>{{tips[conf.lang].blocklevel}}</label>
             <input type="text" v-model="conf.block.level" pattern="[0-9]" min="0" max="99" maxlength="2" />
             <br />
             <input type="range" v-model="conf.block.level" min="0" max="20" />
           </div>
           <div class="colormode">
-            <label>Name color</label>
+            <label>{{tips[conf.lang].colormode}}</label>
             <transition name="colormodets">
               <button :key="'colormode'+conf.colormode" @click="switchcolormode">{{colormodestr}}</button>
             </transition>
           </div>
           <div class="roomid">
-            <label>Room id</label>
+            <label>{{tips[conf.lang].roomid}}</label>
             <input type="text" v-model="roomid" pattern="[0-9]" min="1" max="99" maxlength="9" />
           </div>
           <div class="timeftt">
-            <label>Time format(Empty to No display)</label><br />
+            <label>{{tips[conf.lang].timeftt}}</label><br />
             <input type="text" v-model="conf.timeformat" />
           </div>
           <button key="applyconfbtn" @click="applyconf">OK</button>
           <a id="about" target="_blank" href="https://github.com/SakuranoKuriko/bilibili-chatbox">Source code</a>
+          <select class="langsel" v-mode="conf.lang">
+            <option v-for="l in langs" :value="l.code">{{l.text}}</option>
+          </select>
         </div>
       </div>
     </transition>
@@ -381,7 +462,7 @@
         this.close();
       bcv.roomid = roomid;
       bcv.roomhost = roomhost;
-      bcv.bcmsg("Connecting Room:"+bcv.roomid);
+      bcv.bcmsg(tips[bcv.conf.lang].connecting+bcv.roomid);
       this.ws = new WebSocket(this.server);
       this.ws.binaryType = "arraybuffer"
       this.ws.onopen = () => {
@@ -425,9 +506,9 @@
         this.hbtimer = null;
         if (this.debug)
           console.log("WebSocket: Closed");
-        bcv.bcmsg("Connection closed");
+        bcv.bcmsg(tips[bcv.conf.lang].connectclosed);
         if (bcv.conf.autoreconn){
-          bcv.bcmsg("Reconnecting");
+          bcv.bcmsg(tips[bcv.conf.lang].reconnecting);
           this.conn(bcv.roomid);
         }
       }
@@ -453,6 +534,7 @@
       roomid: 0,
       roomhost: -1,
       conf: {
+        lang: getQueryStr("la") || langs.en.code,
         spannercolor: "#4444ff",
         timeformat: getQueryStr("tf")!==null?getQueryStr("tf"):defconf.timeformat,
         displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
@@ -471,7 +553,7 @@
           random: 1,
           randomdark: 2,
           randomlight: 3
-        }
+        },
       },
       showmenu: false,
       bccount: 0
@@ -480,13 +562,13 @@
       colormodestr: function(){
         switch(this.conf.colormode){
           case this.conf.colormodes.bccolor:
-            return "Listener custom color";
+            return tips[bcv.conf.lang].listenercustom;
           case this.conf.colormodes.random:
-            return "Random";
+            return tips[bcv.conf.lang].random;
           case this.conf.colormodes.randomdark:
-            return "Random dark color";
+            return tips[bcv.conf.lang].randomdark;
           case this.conf.colormodes.randomlight:
-            return "Random light color";
+            return tips[bcv.conf.lang].randomlight;
         }
       }
     },
@@ -579,7 +661,7 @@
     }
   }
 
-  bcv.bcmsg("Right click to open the menu");
+  bcv.bcmsg(tips[bcv.conf.lang].hintmenu);
   if (roomdata.code==0)
     bchat.conn(roomdata.data.room_id, roomdata.data.uid);
   else
