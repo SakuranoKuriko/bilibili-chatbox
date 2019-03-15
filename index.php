@@ -500,7 +500,7 @@
               return; //屏蔽等级不足用户
             setTimeout(() => {
               bcv.bcpush(dm);
-            }, (bchat.delays++)<<7);
+            }, (bchat.delays++)<<8);
           });
       }
       this.ws.onclose = (ev) => {
