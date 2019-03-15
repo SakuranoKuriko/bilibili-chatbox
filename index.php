@@ -351,6 +351,7 @@
       }, true);
       if (obj.size<pbuf.byteLength)
         this.un(pbuf.slice(obj.size), cb);
+      else bchat.delays = 1;
     }
   }
   var bchat = {
@@ -359,6 +360,7 @@
     hbtimer: null,
     hbtime: 30000,
     usrid: 0,
+    delays: 1,
     protover: 1,
     platform: "web",
     clientver: "1.4.0",
@@ -496,7 +498,9 @@
               return; //屏蔽非正式会员
             if (bcv.conf.block.level>dm.user.level.level)
               return; //屏蔽等级不足用户
-            bcv.bcpush(dm);
+            setTimeout(() => {
+              bcv.bcpush(dm);
+            }, (bchat.delays++)<<7);
           });
       }
       this.ws.onclose = (ev) => {
