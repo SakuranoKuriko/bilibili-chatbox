@@ -593,11 +593,11 @@
         this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang]);
       },
       bcpush: function(bcobj){
-        if (this.conf.whitelist.length>1){
+        if (this.conf.whitelist.length>0){
           if (this.conf.whitelist.indexOf(bcobj.user.uidstr)==-1)
             return;
         }
-        else if (this.conf.blacklist.length>1)
+        else if (this.conf.blacklist.length>0)
           if (this.conf.blacklist.indexOf(bcobj.user.uidstr)!=-1)
             return;
         var c = {
