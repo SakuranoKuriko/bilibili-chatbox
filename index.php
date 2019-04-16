@@ -258,7 +258,7 @@
             	c1.8-1.8,4-2.5,6.4-1.9C278.8,56.3,280.4,57.9,281.1,60.5z M35.4,261.3c3.7,0,6.8-1.3,9.4-3.9c2.6-2.6,3.9-5.7,3.9-9.4
             	c0-3.7-1.3-6.8-3.9-9.4c-2.6-2.6-5.7-3.9-9.4-3.9s-6.8,1.3-9.4,3.9c-2.6,2.6-3.9,5.7-3.9,9.4c0,3.7,1.3,6.8,3.9,9.4
             	C28.6,260,31.7,261.3,35.4,261.3z"/>
-          </svg><b><span class="bccolor" :style="{color: c.color}">{{c.nickname}}: {{c.text}}</span></b>
+          </svg><b><span class="bccolor" :style="{color: c.color}"><span class="bcuser">{{c.nickname}}: </span><span class="bctext">{{c.text}}</span></span></b>
         </div>
       </transition-group>
     </div>
