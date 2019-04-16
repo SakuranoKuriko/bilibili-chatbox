@@ -118,7 +118,7 @@
       reconnecting: "Reconnecting",
       hintmenu: "Right click to open the menu"
     };
-  var roomdata = <?php echo file_get_contents("https://api.live.bilibili.com/room/v1/Room/room_init?id=".$_GET['roomid']); ?>;
+  var roomdata = <?php echo file_get_contents("https://api.live.bilibili.com/AppRoom/index?platform=android&room_id=".$_GET['roomid']); ?>;
   function getQueryStr(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
     var r = window.location.search.substr(1).match(reg);
@@ -435,6 +435,7 @@
         },
         user: {
           uid: infoobj[2][0], //发送者UID
+          uidstr: infoobj[2][0].toString(), //发送者UID
           name: infoobj[2][1], //发送者昵称
           type: 0, //用户身份
           color: infoobj[2][7], //用户名颜色
@@ -545,6 +546,8 @@
         displaytime: parseInt(getQueryStr("t")) || defconf.displaytime,
         displaymax: parseInt(getQueryStr("l")) || defconf.displaymax,
         colormode: getQueryStr("c")!==null?parseInt(getQueryStr("c")):defconf.colormode,
+        whitelist: getQueryStr("whitelist")!==null?getQueryStr("whitelist").replace(/[^\d,]/gm,'').split(','):[],
+        blacklist: getQueryStr("blacklist")!==null?getQueryStr("blacklist").replace(/[^\d,]/gm,'').split(','):[],
         block: {
           lottery: getQuerybool("nl")!==null?getQuerybool("nl"):defconf.block.lottery, //屏蔽抽奖弹幕
           noregular: getQuerybool("nr")!==null?getQuerybool("nr"):defconf.block.noregular, //屏蔽非正式会员
@@ -590,6 +593,13 @@
         this.tips = Object.assign({}, this.tips, tipsp[this.conf.lang]);
       },
       bcpush: function(bcobj){
+        if (this.conf.whitelist.length>1){
+          if (this.conf.whitelist.indexOf(bcobj.user.uidstr)==-1)
+            return;
+        }
+        else if (this.conf.blacklist.length>1)
+          if (this.conf.blacklist.indexOf(bcobj.user.uidstr)!=-1)
+            return;
         var c = {
           text: bcobj.comment.text,
           uid: bcobj.user.uid,
@@ -682,9 +692,12 @@
   bcv.loadlang();
   bcv.bcmsg(bcv.tips.hintmenu);
   if (roomdata.code==0)
-    bchat.conn(roomdata.data.room_id, roomdata.data.uid);
-  else
-    bcv.bcmsg("Error["+roomdata.code+"]: "+roomdata.msg);
+    bchat.conn(roomdata.data.room_id, roomdata.data.mid);
+  else{
+    if (roomdata.code==-614)
+      bchat.conn(getQueryStr("roomid"));
+    else bcv.bcmsg("Error["+roomdata.code+"]: "+roomdata.message);
+  }
   </script>
 </body>
 <!-- WebSocket
