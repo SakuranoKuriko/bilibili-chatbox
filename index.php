@@ -674,6 +674,10 @@
           newurl += "&tf="+escape(this.conf.timeformat);
         if (this.conf.lang != defconf.lang)
           newurl += "&la="+this.conf.lang;
+        if (this.conf.whitelist.length>0)
+          newurl += "&whitelist=" + this.conf.whitelist.join(',');
+        if (this.conf.blacklist.length>0)
+          newurl += "&blacklist=" + this.conf.blacklist.join(',');
         location.href = newurl;
       },
       switchcolormode: function(){
