@@ -702,7 +702,8 @@
   if (roomdata.code==0)
     bchat.conn(roomdata.data.room_id, roomdata.data.mid);
   else
-    bcv.bcmsg("Error["+roomdata.code+"]: "+roomdata.message);
+    if (roomdata.code==-614) bchat.conn(parseInt(getQueryStr("roomid")));
+    else bcv.bcmsg("Error["+roomdata.code+"]: "+roomdata.message);
   </script>
 </body>
 <!-- WebSocket
