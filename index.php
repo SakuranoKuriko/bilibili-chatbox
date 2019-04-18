@@ -410,7 +410,7 @@
     },
     dmtype: { //弹幕类型
       normal: 0, //非抽奖弹幕
-      lottery: 2 //花之少女
+      lottery: 2 //抽奖弹幕
     },
     fleettype: { //舰队身份类型
       normal: 0, //非舰长
