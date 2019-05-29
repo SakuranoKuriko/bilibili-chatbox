@@ -375,6 +375,7 @@
     },
     cmd: {
       dm: "DANMU_MSG", //收到弹幕
+      dm2: "DANMU_MSG:4:0:2:2:2:0", //190529 新弹幕指令
       gift: "SEND_GIFT", //有人送礼
       welcome: "WELCOME", //欢迎加入房间
       welcomeguard: "WELCOME_GUARD", //欢迎房管加入房间
@@ -491,7 +492,7 @@
             if (d.type!= this.ptype.command)
               return;
             var p = JSON.parse(d.data);
-            if (p.cmd!=this.cmd.dm)
+            if (p.cmd!=this.cmd.dm&&p.cmd!=this.cmd.dm2)
               return;
             var dm = this.unpackdm(p.info);
             if (bcv.conf.block.lottery && dm.comment.type == this.dmtype.lottery)
@@ -733,6 +734,7 @@ wss://broadcastlv.chat.bilibili.com:2245/sub
 已知的命令：
 命令	含义
 DANMU_MSG	收到弹幕
+DANMU_MSG:4:0:2:2:2:0 190529新弹幕指令
 SEND_GIFT	有人送礼
 WELCOME	欢迎加入房间
 WELCOME_GUARD	欢迎房管加入房间
