@@ -492,7 +492,8 @@
             if (d.type!= this.ptype.command)
               return;
             var p = JSON.parse(d.data);
-            if (p.cmd!=this.cmd.dm&&p.cmd!=this.cmd.dm2)
+            //if (p.cmd!=this.cmd.dm&&p.cmd!=this.cmd.dm2)
+            if (p.cmd.substr(0,this.cmd.dm.length)!=this.cmd.dm)
               return;
             var dm = this.unpackdm(p.info);
             if (bcv.conf.block.lottery && dm.comment.type == this.dmtype.lottery)
